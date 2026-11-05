@@ -1,0 +1,125 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Old Video Games 🎮</title>
+<style>
+body {
+  margin: 0;
+  background: #101020;
+  color: white;
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+header {
+  padding: 35px 10px;
+  background: linear-gradient(135deg,#6a00ff,#ff0077);
+}
+h1 { font-size: 35px; }
+.games {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(145px,1fr));
+  gap: 15px;
+  padding: 20px;
+}
+.game {
+  background: #24243c;
+  border: 2px solid #833cff;
+  border-radius: 15px;
+  padding: 20px 10px;
+}
+button {
+  background: #ff0077;
+  color: white;
+  border: 0;
+  border-radius: 10px;
+  padding: 12px 18px;
+  cursor: pointer;
+  font-size: 16px;
+}
+#gamearea {
+  padding: 20px;
+}
+canvas {
+  background: black;
+  max-width: 100%;
+  border: 2px solid #833cff;
+}
+</style>
+</head>
+<body>
+
+<header>
+<h1>🎮 OLD VIDEO GAMES</h1>
+<p>Deine eigene Retro Gaming Arcade!</p>
+</header>
+
+<h2>🕹️ Wähle dein Spiel</h2>
+
+<div class="games">
+<div class="game">
+<h3>🐍 Snake</h3>
+<button onclick="snake()">Spielen</button>
+</div>
+<div class="game">
+<h3>🏓 Pong</h3>
+<button onclick="pong()">Bald!</button>
+</div>
+<div class="game">
+<h3>🧱 Brick Breaker</h3>
+<button onclick="alert('Kommt bald!')">Bald!</button>
+</div>
+<div class="game">
+<h3>🚀 Space Shooter</h3>
+<button onclick="alert('Kommt bald!')">Bald!</button>
+</div>
+</div>
+
+<div id="gamearea">
+<p>Wähle ein Spiel und hab Spaß! ✨</p>
+</div>
+
+<script>
+let timer;
+
+function snake() {
+clearInterval(timer);
+document.getElementById("gamearea").innerHTML =
+'<h2>🐍 Snake</h2><p>Pfeiltasten oder WASD zum Spielen</p><canvas id="c" width="300" height="300"></canvas><p id="score">Punkte: 0</p>';
+let c=document.getElementById("c"),ctx=c.getContext("2d");
+let s=15,x=150,y=150,dx=s,dy=0,food={x:60,y:60};
+let tail=[],length=3,score=0;
+document.onkeydown=e=>{
+if(e.key==="ArrowUp"||e.key==="w"){if(dy===0){dx=0;dy=-s}}
+if(e.key==="ArrowDown"||e.key==="s"){if(dy===0){dx=0;dy=s}}
+if(e.key==="ArrowLeft"||e.key==="a"){if(dx===0){dx=-s;dy=0}}
+if(e.key==="ArrowRight"||e.key==="d"){if(dx===0){dx=s;dy=0}}
+};
+timer=setInterval(()=>{
+x+=dx;y+=dy;
+if(x<0||y<0||x>=300||y>=300||tail.some(p=>p.x===x&&p.y===y)){
+clearInterval(timer);
+alert("Game Over! Punkte: "+score);
+return;
+}
+tail.push({x,y});
+if(x===food.x&&y===food.y){
+length++;score+=10;
+food={x:Math.floor(Math.random()*20)*s,y:Math.floor(Math.random()*20)*s};
+document.getElementById("score").textContent="Punkte: "+score;
+}
+while(tail.length>length)tail.shift();
+ctx.fillStyle="black";ctx.fillRect(0,0,300,300);
+ctx.fillStyle="#00ff88";
+tail.forEach(p=>ctx.fillRect(p.x,p.y,s-1,s-1));
+ctx.fillStyle="#ff0077";ctx.fillRect(food.x,food.y,s,s);
+},120);
+}
+function pong(){
+alert("Pong kommt bald! 🏓");
+}
+</script>
+</body>
+</html>
